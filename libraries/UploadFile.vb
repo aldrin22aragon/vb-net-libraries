@@ -1,4 +1,8 @@
-﻿Imports WinSCP
+﻿' please add WinSCP.exe startup Path 5.17.8.10803
+' add reference WinSCPnet.dll 5.17.8.0
+
+
+Imports WinSCP
 Public Class UploadFile
    ReadOnly sesOptions As SessionOptions
    ReadOnly flPath As String
