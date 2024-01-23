@@ -29,32 +29,32 @@ Public Class MyDb
             Me.con.Open()
         End If
     End Sub
-    Public Function createAccessDatabase(ByVal dbPath As String, Optional deletIfExit As Boolean = False) As Boolean
-        Dim bAns As Boolean
-        Dim cat As New ADOX.Catalog()
-        If deletIfExit Then
-            Try
-                IO.File.Delete(dbPath)
-            Catch ex As Exception
-                Return False
-            End Try
-        End If
-        Try
-            Dim sCreateString As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & dbPath & ";Jet OLEDB:Engine Type=5"
-            cat.Create(sCreateString)
-            Me.con = New OleDbConnection(sCreateString)
-            Me.con.Open()
-            bAns = True
-        Catch Excep As System.Runtime.InteropServices.COMException
-            bAns = False
-        Finally
-            cat = Nothing
-            GC.Collect()
-            GC.WaitForPendingFinalizers()
-        End Try
-        Return bAns
-    End Function
-    Public Function select_(ByVal Sql As String, Optional ByVal path As String = "") As QueryInfo
+   Public Function CreateAccessDatabase(ByVal dbPath As String, Optional deletIfExit As Boolean = False) As Boolean
+      Dim bAns As Boolean
+      Dim cat As New ADOX.Catalog()
+      If deletIfExit Then
+         Try
+            IO.File.Delete(dbPath)
+         Catch ex As Exception
+            Return False
+         End Try
+      End If
+      Try
+         Dim sCreateString As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & dbPath & ";Jet OLEDB:Engine Type=5"
+         cat.Create(sCreateString)
+         Me.con = New OleDbConnection(sCreateString)
+         Me.con.Open()
+         bAns = True
+      Catch Excep As System.Runtime.InteropServices.COMException
+         bAns = False
+      Finally
+         cat = Nothing
+         GC.Collect()
+         GC.WaitForPendingFinalizers()
+      End Try
+      Return bAns
+   End Function
+   Public Function select_(ByVal Sql As String, Optional ByVal path As String = "") As QueryInfo
         Dim adapter As OleDbDataAdapter
         Dim data As New DataTable("Data")
         If Me.con IsNot Nothing Then

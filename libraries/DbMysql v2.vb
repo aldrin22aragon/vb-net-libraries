@@ -57,7 +57,7 @@ Public Class DbMysql
          End If
       End Sub
    End Structure
-   Function tryOpenConnection() As Boolean
+   Function TryOpenConnection() As Boolean
       Dim tryCount As Integer = 0
       While Not Me.connection.State = ConnectionState.Open
          tryCount += 1
@@ -73,7 +73,7 @@ Public Class DbMysql
       End While
       Return False
    End Function
-   Sub tryCloseConncetion()
+   Sub TryCloseConncetion()
       If Not retainOpenConnection Then
          Dim tryCount As Integer = 0
          While Me.connection.State = ConnectionState.Open
@@ -91,9 +91,9 @@ Public Class DbMysql
          End While
       End If
    End Sub
-   Function showDatabasses() As List(Of String)
+   Function ShowDatabasses() As List(Of String)
       Dim res As New List(Of String)
-      If tryOpenConnection() Then
+      If TryOpenConnection() Then
          Using command As New MySql.Data.MySqlClient.MySqlCommand
             command.Connection = Me.connection
             command.CommandText = "SHOW DATABASES;"
@@ -111,9 +111,9 @@ Public Class DbMysql
       End If
       Return res
    End Function
-   Function showTables() As List(Of String)
+   Function ShowTables() As List(Of String)
       Dim res As New List(Of String)
-      If tryOpenConnection() Then
+      If TryOpenConnection() Then
          Using command As New MySql.Data.MySqlClient.MySqlCommand
             command.Connection = Me.connection
             command.CommandText = "SHOW TABLES;"
@@ -136,9 +136,10 @@ Public Class DbMysql
       Me.connProp = connectionProp
       Me.connection = New MySqlConnection(connectionProp.connectionString)
    End Sub
+
    Function SelectQuery(columns As String, tableName As String, Optional whereCondition As String = "1", Optional bindParams As Dictionary(Of String, Object) = Nothing) As ReturnStatement
       Dim sql As String = String.Concat("SELECT ", columns, " FROM ", tableName, " WHERE ", whereCondition)
-      tryOpenConnection()
+      TryOpenConnection()
       Dim cmd As New MySqlCommand(sql, Me.connection)
       If bindParams IsNot Nothing Then
          For Each dict As KeyValuePair(Of String, Object) In bindParams
@@ -149,7 +150,7 @@ Public Class DbMysql
          Dim adapter As New MySqlDataAdapter(cmd)
          Dim tbl As New DataTable
          adapter.Fill(tbl)
-         tryCloseConncetion()
+         TryCloseConncetion()
          Return New ReturnStatement("okay", True, tbl.Rows.Count, tbl)
       Catch ex As Exception
          Return New ReturnStatement(ex.Message)
@@ -191,7 +192,7 @@ Public Class DbMysql
 
    'Dim sqlFileTbl = .myDb.SelectQuery("SELECT * from file_tbl WHERE id=@id", {New String() {"id", fileID}})
    Function SelectQuery(sql As String, ParamArray bindParams() As Array) As ReturnStatement
-      tryOpenConnection()
+      TryOpenConnection()
       Dim cmd As New MySqlCommand(sql, Me.connection)
       If bindParams.Length > 0 Then
          For Each i As Array In bindParams
@@ -202,7 +203,7 @@ Public Class DbMysql
          Dim adapter As New MySqlDataAdapter(cmd)
          Dim tbl As New DataTable
          adapter.Fill(tbl)
-         tryCloseConncetion()
+         TryCloseConncetion()
          Return New ReturnStatement("okay", True, tbl.Rows.Count, tbl)
       Catch ex As Exception
          Return New ReturnStatement(ex.Message)
@@ -232,7 +233,7 @@ Public Class DbMysql
       extColumns = extColumns.Trim(",")
       extValues = extValues.Trim(",")
       Dim sql As String = String.Concat("INSERT INTO ", tableNme, " (", extColumns, ") values (", extValues, "); select last_insert_id() as id;")
-      tryOpenConnection()
+      TryOpenConnection()
       Try
          Dim res = Me.SelectQuery(sql, bindParams)
          If res.isSucces And res.tbl_rowCount > 0 Then
@@ -251,7 +252,7 @@ Public Class DbMysql
    'New String() {"upd_process_id", process_tbl_inserted_id}})
    Function NonQuery(sql As String, ParamArray bindParams() As Array) As ReturnStatement
       Dim extColumns As String = ""
-      tryOpenConnection()
+      TryOpenConnection()
       Dim cmd As New MySqlCommand(sql, Me.connection)
       If bindParams.Length > 0 Then
          For Each i As Array In bindParams
@@ -260,7 +261,7 @@ Public Class DbMysql
       End If
       Try
          Dim count As Integer = cmd.ExecuteNonQuery()
-         tryCloseConncetion()
+         TryCloseConncetion()
          Return New ReturnStatement("okay", True, count)
       Catch ex As Exception
          Return New ReturnStatement(ex.Message)
@@ -269,7 +270,7 @@ Public Class DbMysql
 
    Function NonQuery2(sql As String, ParamArray bindParams() As Array) As ReturnStatement
       Dim extColumns As String = ""
-      tryOpenConnection()
+      TryOpenConnection()
       Dim cmd As New MySqlCommand(sql, Me.connection)
       If bindParams.Length > 0 Then
          For Each i As Array In bindParams
@@ -278,25 +279,25 @@ Public Class DbMysql
       End If
       Try
          Dim count As Integer = cmd.ExecuteNonQuery()
-         tryCloseConncetion()
+         TryCloseConncetion()
          Return New ReturnStatement("okay", True, count)
       Catch ex As Exception
          Return New ReturnStatement(ex.Message)
       End Try
    End Function
 
-   Function executeNonQueryCommand(cmd As MySqlCommand) As ReturnStatement
+   Function ExecuteNonQueryCommand(cmd As MySqlCommand) As ReturnStatement
       Try
-         tryOpenConnection()
+         TryOpenConnection()
          Dim count As Integer = cmd.ExecuteNonQuery()
-         tryCloseConncetion()
+         TryCloseConncetion()
          Return New ReturnStatement("okay", True, count)
       Catch ex As Exception
          Return New ReturnStatement(ex.Message)
       End Try
    End Function
 
-   Function getCommand(sql) As MySqlCommand
+   Function GetCommand(sql) As MySqlCommand
       Return New MySqlCommand(sql, Me.connection)
    End Function
 End Class

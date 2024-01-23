@@ -7,7 +7,7 @@ Public Class Thread_
    Public max As Integer
 
    Public Sub doThis()
-      Multi_Thread.onProcess += 1
+      'Multi_Thread.onProcess += 1
       isWorking = True
       Me.wrkr.RunWorkerAsync()
    End Sub
@@ -32,7 +32,7 @@ Public Class Thread_
    End Sub
 
    Private Sub wrkrDone(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs)
-      Multi_Thread.onProcess -= 1
+      'Multi_Thread.onProcess -= 1
       isDone = True
       isWorking = False
       wrkr.Dispose()

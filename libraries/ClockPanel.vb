@@ -20,12 +20,17 @@
 'https://www.coderslexicon.com/wp-content/uploads/2013/04/clockface.gif
 
 Public Class ClockPanel : Inherits Panel
-    Public Sub New()
-        Me.DoubleBuffered = True
-    End Sub
 
-    ' Find a point on a circle's circumference given the circle's origin, radius and degrees.
-    Private Function FindPointOnCircle(originPoint As Point, radius As Double, angleDegrees As Double) As Point
+   Friend WithEvents Timer As New Timer()
+
+   Public Sub New()
+      Me.DoubleBuffered = True
+      Timer.Interval = 1000
+      Timer.Start()
+   End Sub
+
+   ' Find a point on a circle's circumference given the circle's origin, radius and degrees.
+   Private Function FindPointOnCircle(originPoint As Point, radius As Double, angleDegrees As Double) As Point
         Dim x As Double = radius * Math.Cos(Math.PI * angleDegrees / 180.0) + originPoint.X
         Dim y As Double = radius * Math.Sin(Math.PI * angleDegrees / 180.0) + originPoint.Y
 
@@ -108,4 +113,8 @@ Public Class ClockPanel : Inherits Panel
         MyBase.OnPaint(e)
         e.Graphics.DrawImage(DrawClock(), 0, 0, Me.Width, Me.Height)
     End Sub
+
+   Private Sub Timer_Tick(sender As Object, e As EventArgs) Handles Timer.Tick
+      Me.Refresh()
+   End Sub
 End Class
