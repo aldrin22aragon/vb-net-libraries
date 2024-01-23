@@ -15,11 +15,11 @@ Public Class DbMysql
       Public user As String = ""
       Public password As String = ""
       Public prggrammer As String = ""
-      Public Function connectionString() As String
+      Public Function ConnectionString() As String
          If database = "" Then
-            connectionString = String.Concat("Server=", server, ";Uid=", user, ";port=", port, ";Pwd=", password, ";AllowBatch=True;Convert Zero Datetime=True;")
+            ConnectionString = String.Concat("Server=", server, ";Uid=", user, ";port=", port, ";Pwd=", password, ";AllowBatch=True;Convert Zero Datetime=True;")
          Else
-            connectionString = String.Concat("server=", server, ";user=", user, ";database=", database, ";port=", port, ";password=", password, ";AllowBatch=True;Convert Zero Datetime=True;")
+            ConnectionString = String.Concat("server=", server, ";user=", user, ";database=", database, ";port=", port, ";password=", password, ";AllowBatch=True;Convert Zero Datetime=True;")
          End If
       End Function
       Sub New()
@@ -136,28 +136,28 @@ Public Class DbMysql
 
    Sub New(connectionProp As ConnectionProp)
       Me.connProp = connectionProp
-      Me.connection = New MySqlConnection(connectionProp.connectionString)
+      Me.connection = New MySqlConnection(connectionProp.ConnectionString)
    End Sub
 
-   Function SelectQuery(columns As String, tableName As String, Optional whereCondition As String = "1", Optional bindParams As Dictionary(Of String, Object) = Nothing) As ReturnStatement
-      Dim sql As String = String.Concat("SELECT ", columns, " FROM ", tableName, " WHERE ", whereCondition)
-      TryOpenConnection()
-      Dim cmd As New MySqlCommand(sql, Me.connection)
-      If bindParams IsNot Nothing Then
-         For Each dict As KeyValuePair(Of String, Object) In bindParams
-            cmd.Parameters.AddWithValue(dict.Key, dict.Value)
-         Next
-      End If
-      Try
-         Dim adapter As New MySqlDataAdapter(cmd)
-         Dim tbl As New DataTable
-         adapter.Fill(tbl)
-         TryCloseConncetion()
-         Return New ReturnStatement("okay", True, tbl.Rows.Count, tbl)
-      Catch ex As Exception
-         Return New ReturnStatement(ex.Message)
-      End Try
-   End Function
+   'Function SelectQuery(columns As String, tableName As String, Optional whereCondition As String = "1", Optional bindParams As Dictionary(Of String, Object) = Nothing) As ReturnStatement
+   '   Dim sql As String = String.Concat("SELECT ", columns, " FROM ", tableName, " WHERE ", whereCondition)
+   '   TryOpenConnection()
+   '   Dim cmd As New MySqlCommand(sql, Me.connection)
+   '   If bindParams IsNot Nothing Then
+   '      For Each dict As KeyValuePair(Of String, Object) In bindParams
+   '         cmd.Parameters.AddWithValue(dict.Key, dict.Value)
+   '      Next
+   '   End If
+   '   Try
+   '      Dim adapter As New MySqlDataAdapter(cmd)
+   '      Dim tbl As New DataTable
+   '      adapter.Fill(tbl)
+   '      TryCloseConncetion()
+   '      Return New ReturnStatement("okay", True, tbl.Rows.Count, tbl)
+   '   Catch ex As Exception
+   '      Return New ReturnStatement(ex.Message)
+   '   End Try
+   'End Function
 
    Iterator Function IterateSelectQuery(IterateCMD As MySqlCommand) As IEnumerable(Of MySqlDataReader)
       IterateCMD.Connection.Open()
@@ -171,7 +171,7 @@ Public Class DbMysql
       GC.WaitForPendingFinalizers()
    End Function
    Function IterateCMD(sql) As MySqlCommand
-      Return New MySqlCommand(sql, New MySqlConnection(Me.connProp.connectionString))
+      Return New MySqlCommand(sql, New MySqlConnection(Me.connProp.ConnectionString))
    End Function
    'Dim sqlFileTbl = .myDb.IterateSelectQuery("SELECT * from file_tbl WHERE id=@id", {New String() {"id", fileID}})
    Iterator Function IterateSelectQuery(sql As String, ParamArray bindParams() As Array) As IEnumerable(Of MySqlDataReader)
