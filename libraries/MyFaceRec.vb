@@ -4,7 +4,7 @@ Imports Neurotec.Biometrics.Client
 Imports Neurotec.Biometrics.Gui
 Imports Neurotec.Licensing
 
-
+' add NFaceView Controll in Neurotec.Biometrics.Gui
 
 Public Class MyFaceRec
    Public tmpExtention As String = ".enc" ' must be with dot at beginning. 
