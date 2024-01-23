@@ -1,0 +1,26 @@
+Important folders to deploy lahat ng laman nyan 
+		C:\Users\soft10\Documents\Visual Studio 2019\Projects\FaceRec (github)\New Folder\Time Recorder v5.0\bin
+
+Reminder: dapat kasama yung 'data' folder galing sa bin folder.
+		'data' folder dapat nasa labas sya naka lagay outside exe.
+		Lahat ng DLLs na nasa tabi ng exe dapat copy lahat.
+		Error kapag di nasama yung 'data' =>
+			NFileNotFoundException: Faces feature points detector model file is missing	
+
+Meron dalawang version ng "Data" folder.
+	Meron para sa version 5.0 exe 
+		C:\Users\soft10\Documents\Visual Studio 2019\Projects\FaceRec (github)\New Folder\Time Recorder v5.0\bin\Data 5.0 backup
+	Meron para sa version 5.1 exe
+		C:\Users\soft10\Documents\Visual Studio 2019\Projects\FaceRec (github)\New Folder\Time Recorder v5.0\bin\Data 5.1 backup
+	Mag-e Error ito kapag hinde tama ang files sa data. Once naka detect ng face ang camera.
+		
+
+Nasa 'New Folder' ang source code.
+	Bakit new foler yung name? Bakit hinde palitan ng facerec name?
+		Kase naka Register ang exe as trusted application sa anti virus. Which is naka locate sa 'New Folder'
+		kapag Pinalitan ng folder name, or minove ang source code or exe, ang 
+		Error nya ay => Hinde madidisplay ang view ng Camera.
+	Note: 
+        kapag mag deploy ng exe, make sure yung exe is naka trusted sya. Naseset yan sa anti virus. kaya need ng 
+		assistance ng technician. [Kasperskey]/settings/Threats and exclution/Specify trusted applications
+		
