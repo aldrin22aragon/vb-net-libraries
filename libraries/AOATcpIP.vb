@@ -9,7 +9,7 @@ Public Class AOATCPIP
    Public myIPaddress As String
    Public recieverIPaddress As String
    Public recieverPort As String
-   Friend WithEvents timer As Timer
+   Friend WithEvents Timer As Timer
    Event Recieved As EventHandler(Of SendReceInfo)
    ''' <summary>
    ''' Para ito sa mga mag coconect sa host.
@@ -17,14 +17,14 @@ Public Class AOATCPIP
    ''' <param name="recieverPort">Yung host na yung mag bibigay kung anong port</param>
    ''' <param name="recieverIPaddress">Yung host na yung mag bibigay kung anong IP Address</param>
    Sub New(recieverPort As String, recieverIPaddress As String)
-      Dim ipAddress_ As String = getAvailableIPAddress()
+      Dim ipAddress_ As String = GetAvailableIPAddress()
       Dim ss As Integer = FreeTcpPort()
       If ipAddress_ <> "" Then
          myIPaddress = ipAddress_
          Me.recieverIPaddress = recieverIPaddress
          Me.recieverPort = recieverPort
-         timer = New Timer()
-         timer.Enabled = False
+         Timer = New Timer()
+         Timer.Enabled = False
       Else
          Throw New Exception("Cant get ip address")
       End If
@@ -39,27 +39,27 @@ Public Class AOATCPIP
    ''' </summary>
    ''' <param name="ifHost_supplyPort">Mag supply ka ng port. Kung walang port, kunin mo dito AOATCPIP.FreeTcpPort()". Matik na yung IP mag generate.</param>
    Sub New(ifHost_supplyPort As String)
-      Dim ipAddress_ As String = getAvailableIPAddress()
+      Dim ipAddress_ As String = GetAvailableIPAddress()
       If ipAddress_ <> "" Then
          Dim ep As IPEndPoint = New IPEndPoint(IPAddress.Parse(ipAddress_), ifHost_supplyPort)
          listener = New TcpListener(ep)
          myIPaddress = ipAddress_
          myPort = ifHost_supplyPort
-         timer = New Timer()
-         timer.Enabled = False
+         Timer = New Timer()
+         Timer.Enabled = False
       Else
          Throw New Exception("Cant get ip address")
       End If
    End Sub
-   Public Sub stopListen()
-      timer.Stop()
+   Public Sub StopListen()
+      Timer.Stop()
       listener.Stop()
    End Sub
-   Public Sub startListen()
+   Public Sub StartListen()
       Dim ep As IPEndPoint = New IPEndPoint(IPAddress.Parse(myIPaddress), myPort)
       listener = New TcpListener(ep)
       listener.Start()
-      timer.Enabled = True
+      Timer.Enabled = True
    End Sub
    Public Shared Function FreeTcpPort() As Integer
       Dim l As TcpListener = New TcpListener(IPAddress.Loopback, 0)
@@ -68,7 +68,7 @@ Public Class AOATCPIP
       l.[Stop]()
       Return port
    End Function
-   Public Async Function sendMessage(sendingInfo As SendReceInfo) As Task(Of SendReceInfo)
+   Public Async Function SendMessage(sendingInfo As SendReceInfo) As Task(Of SendReceInfo)
       Dim res As New SendReceInfo
       Try
          Dim messageBytes As Byte() = System.Text.Encoding.Unicode.GetBytes(JsonConvert.SerializeObject(sendingInfo))
@@ -80,7 +80,7 @@ Public Class AOATCPIP
          stream.Dispose()
          client.Close()
 
-         Dim msg As String = cleanMessage(messageBytes)
+         Dim msg As String = CleanMessage(messageBytes)
          JsonConvert.PopulateObject(msg, res)
       Catch e As Exception
          res.isError = True
@@ -99,7 +99,7 @@ Public Class AOATCPIP
          Await stream.ReadAsync(messageBytes, 0, messageBytes.Length)
          stream.Dispose()
          client.Close()
-         Dim msg As String = cleanMessage(messageBytes)
+         Dim msg As String = CleanMessage(messageBytes)
          Dim receivedInfo As New SendReceInfo
          JsonConvert.PopulateObject(msg, receivedInfo)
          res = receivedInfo
@@ -111,7 +111,7 @@ Public Class AOATCPIP
    End Function
 
    Dim ticking As Boolean = False
-   Private Sub timer_Tick(sender_ As Object, e As EventArgs) Handles timer.Tick
+   Private Sub Timer_Tick(sender_ As Object, e As EventArgs) Handles Timer.Tick
       If Not ticking Then
          ticking = True
          If listener.Pending Then
@@ -120,7 +120,7 @@ Public Class AOATCPIP
             Dim buffer As Byte() = New Byte(1048575) {}
             Dim sender = listener.AcceptTcpClient()
             sender.GetStream().Read(buffer, 0, bytesize)
-            message = cleanMessage(buffer)
+            message = CleanMessage(buffer)
             'message = System.Text.Encoding.Unicode.GetString(buffer)
             Dim recievedInfo As New SendReceInfo
             JsonConvert.PopulateObject(message, recievedInfo)
@@ -131,7 +131,7 @@ Public Class AOATCPIP
       End If
    End Sub
 #Region "Functions"
-   Public Shared Function cleanMessage(ByVal bytes As Byte()) As String
+   Public Shared Function CleanMessage(ByVal bytes As Byte()) As String
       Dim message As String = System.Text.Encoding.Unicode.GetString(bytes)
       Dim messageToPrint As String = Nothing
       For Each nullChar In message
@@ -141,7 +141,7 @@ Public Class AOATCPIP
       Next
       Return messageToPrint
    End Function
-   Shared Function getAvailableIPAddress() As String
+   Shared Function GetAvailableIPAddress() As String
       Dim res As String = ""
       Try
          Dim aaa = System.Net.Dns.GetHostAddresses(getComputerId)
@@ -167,7 +167,7 @@ Public Class AOATCPIP
       Public errorMsg As String = ""
       Public _object As Object = Nothing
       Public GetStream As NetworkStream = Nothing
-      Sub reply(rep As SendReceInfo)
+      Sub Reply(rep As SendReceInfo)
          If GetStream Is Nothing Then
             MsgBox("Cant reply because GetStream is nothing.")
             Exit Sub

@@ -12,12 +12,12 @@
 
       Me.control.Visible = False
    End Sub
-   Sub showControl()
+   Sub ShowControl()
       timeStarts = Now
       control.Visible = True
       timer.Enabled = True
    End Sub
-   Sub hideControl()
+   Sub HideControl()
       control.Visible = False
       timer.Enabled = False
       RaiseEvent ControlHidded()
@@ -25,7 +25,7 @@
    Private Sub timer_Tick(sender As Object, e As EventArgs) Handles timer.Tick
       Dim elaps As TimeSpan = Now.Subtract(timeStarts)
       If elaps.TotalMilliseconds >= timeOutMiliseconcd Then
-         hideControl()
+         HideControl()
       End If
    End Sub
 End Class
