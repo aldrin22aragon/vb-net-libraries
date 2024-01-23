@@ -47,6 +47,9 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>admin_1246392.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
       <HintPath>packages\BouncyCastle.Cryptography.2.2.1\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
@@ -68,6 +71,27 @@
     </Reference>
     <Reference Include="MySql.Data, Version=8.3.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>packages\MySql.Data.8.3.0\lib\net462\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec">
+      <HintPath>..\..\..\Documents\Visual Studio 2019\Projects\FaceRec (github)\New Folder\Time Recorder v5.0\bin\debug\Neurotec.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Biometrics">
+      <HintPath>..\..\..\Documents\Visual Studio 2019\Projects\FaceRec (github)\New Folder\Time Recorder v5.0\bin\debug\Neurotec.Biometrics.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Biometrics.Client">
+      <HintPath>..\..\..\Documents\Visual Studio 2019\Projects\FaceRec (github)\New Folder\Time Recorder v5.0\bin\debug\Neurotec.Biometrics.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Biometrics.Gui">
+      <HintPath>..\..\..\Documents\Visual Studio 2019\Projects\FaceRec (github)\New Folder\Time Recorder v5.0\bin\debug\Neurotec.Biometrics.Gui.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Gui">
+      <HintPath>..\..\..\Documents\Visual Studio 2019\Projects\FaceRec (github)\New Folder\Time Recorder v5.0\bin\debug\Neurotec.Gui.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Licensing">
+      <HintPath>..\..\..\Documents\Visual Studio 2019\Projects\FaceRec (github)\New Folder\Time Recorder v5.0\bin\debug\Neurotec.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Media">
+      <HintPath>..\..\..\Documents\Visual Studio 2019\Projects\FaceRec (github)\New Folder\Time Recorder v5.0\bin\debug\Neurotec.Media.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -105,6 +129,7 @@
     </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -149,6 +174,7 @@
     <Compile Include="libraries\History.vb" />
     <Compile Include="libraries\MyDb.vb" />
     <Compile Include="libraries\MyExcel.vb" />
+    <Compile Include="libraries\MyFaceRec.vb" />
     <Compile Include="libraries\MyLabelfader.vb" />
     <Compile Include="libraries\PdfToTiffCOnverter.vb" />
     <Compile Include="libraries\Shortcut Creator.vb" />
@@ -217,6 +243,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\4e8f6206f82e5cdd2d6c339d68fb5818.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="admin_1246392.ico" />
+    <Content Include="leaf_128_IxO_icon %281%29.ico" />
+    <Content Include="libraries\MyFaceRec Notes.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
