@@ -1,4 +1,6 @@
-﻿Imports MySql.Data.MySqlClient
+﻿'please add reference MySql.Data
+
+Imports MySql.Data.MySqlClient
 
 Public Class DbMysql
    Public connection As MySqlConnection
