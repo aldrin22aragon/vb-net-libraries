@@ -27,12 +27,12 @@ Partial Class FtpBrowser
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.btnNext_ = New System.Windows.Forms.Button()
+        Me.BtnNext_ = New System.Windows.Forms.Button()
         Me.BtnPrev_ = New System.Windows.Forms.Button()
         Me.btnrefresh = New System.Windows.Forms.Button()
         Me.btnSelect = New System.Windows.Forms.Button()
         Me.btnOpen = New System.Windows.Forms.Button()
-        Me.lv = New System.Windows.Forms.ListView()
+        Me.Lv = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
@@ -53,12 +53,12 @@ Partial Class FtpBrowser
         '
         Me.Panel2.AutoScroll = True
         Me.Panel2.Controls.Add(Me.PictureBox1)
-        Me.Panel2.Controls.Add(Me.btnNext_)
+        Me.Panel2.Controls.Add(Me.BtnNext_)
         Me.Panel2.Controls.Add(Me.BtnPrev_)
         Me.Panel2.Controls.Add(Me.btnrefresh)
         Me.Panel2.Controls.Add(Me.btnSelect)
         Me.Panel2.Controls.Add(Me.btnOpen)
-        Me.Panel2.Controls.Add(Me.lv)
+        Me.Panel2.Controls.Add(Me.Lv)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(2, 46)
         Me.Panel2.Name = "Panel2"
@@ -77,13 +77,13 @@ Partial Class FtpBrowser
         '
         'btnNext_
         '
-        Me.btnNext_.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnNext_.Location = New System.Drawing.Point(214, 198)
-        Me.btnNext_.Name = "btnNext_"
-        Me.btnNext_.Size = New System.Drawing.Size(30, 25)
-        Me.btnNext_.TabIndex = 7
-        Me.btnNext_.Text = "→"
-        Me.btnNext_.UseVisualStyleBackColor = True
+        Me.BtnNext_.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BtnNext_.Location = New System.Drawing.Point(214, 198)
+        Me.BtnNext_.Name = "btnNext_"
+        Me.BtnNext_.Size = New System.Drawing.Size(30, 25)
+        Me.BtnNext_.TabIndex = 7
+        Me.BtnNext_.Text = "→"
+        Me.BtnNext_.UseVisualStyleBackColor = True
         '
         'BtnPrev_
         '
@@ -129,18 +129,18 @@ Partial Class FtpBrowser
         '
         'lv
         '
-        Me.lv.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
-        Me.lv.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lv.FullRowSelect = True
-        Me.lv.GridLines = True
-        Me.lv.HideSelection = False
-        Me.lv.Location = New System.Drawing.Point(3, 2)
-        Me.lv.Name = "lv"
-        Me.lv.Size = New System.Drawing.Size(411, 192)
-        Me.lv.SmallImageList = Me.ImageList1
-        Me.lv.TabIndex = 0
-        Me.lv.UseCompatibleStateImageBehavior = False
-        Me.lv.View = System.Windows.Forms.View.Details
+        Me.Lv.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
+        Me.Lv.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Lv.FullRowSelect = True
+        Me.Lv.GridLines = True
+        Me.Lv.HideSelection = False
+        Me.Lv.Location = New System.Drawing.Point(3, 2)
+        Me.Lv.Name = "lv"
+        Me.Lv.Size = New System.Drawing.Size(411, 192)
+        Me.Lv.SmallImageList = Me.ImageList1
+        Me.Lv.TabIndex = 0
+        Me.Lv.UseCompatibleStateImageBehavior = False
+        Me.Lv.View = System.Windows.Forms.View.Details
         '
         'ColumnHeader1
         '
@@ -182,14 +182,14 @@ Partial Class FtpBrowser
     End Sub
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
-    Friend WithEvents lv As System.Windows.Forms.ListView
+    Friend WithEvents Lv As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Friend WithEvents btnSelect As System.Windows.Forms.Button
     Friend WithEvents btnOpen As System.Windows.Forms.Button
     Friend WithEvents btnrefresh As System.Windows.Forms.Button
-    Friend WithEvents btnNext_ As System.Windows.Forms.Button
+    Friend WithEvents BtnNext_ As System.Windows.Forms.Button
     Friend WithEvents BtnPrev_ As System.Windows.Forms.Button
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
 End Class
