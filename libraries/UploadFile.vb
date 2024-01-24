@@ -1,22 +1,19 @@
 ﻿' please add WinSCP.exe startup Path 5.17.8.10803
 ' add reference WinSCPnet.dll 5.17.8.0
 
-
 Imports WinSCP
 Public Class UploadFile
    ReadOnly sesOptions As SessionOptions
    ReadOnly flPath As String
-   ReadOnly destination As String
-   ReadOnly dgvRow As DataGridViewRow
+   ReadOnly ftpDestinationFolder As String
+   '
    Public status As New _STAT_INFO()
    Public th As System.Threading.Thread
-   Public removeAfterDowload As Boolean = False
 
-   Sub New(filePath As String, destFolder As String, sesOption As WinSCP.SessionOptions, dgvRow As DataGridViewRow)
+   Sub New(filePath As String, ftpDestinationFolder As String, sesOption As WinSCP.SessionOptions)
       Me.flPath = filePath
       Me.sesOptions = sesOption
-      Me.dgvRow = dgvRow
-      Me.destination = destFolder
+      Me.ftpDestinationFolder = ftpDestinationFolder
    End Sub
    Sub StartUpload()
       status = New _STAT_INFO() With {
@@ -33,7 +30,7 @@ Public Class UploadFile
       Try
          Dim ses As New Session
          AddHandler ses.FileTransferProgress, Sub(sender As Object, e As FileTransferProgressEventArgs)
-                                                 dgvRow.Cells(3).Value = String.Concat((e.FileProgress * 100).ToString, "%")
+                                                 status.uploadPercentage = String.Concat((e.FileProgress * 100).ToString, "%")
                                               End Sub
          ses.Open(Me.sesOptions)
          Try
@@ -43,8 +40,8 @@ Public Class UploadFile
             Dim transferResult As TransferOperationResult
             Dim flNameWOext As String = IO.Path.GetFileNameWithoutExtension(Me.flPath)
             Dim extWithDot As String = IO.Path.GetExtension(Me.flPath)
-            Dim tmpDest As String = RemotePath.Combine(Me.destination, String.Concat(flNameWOext, extWithDot, ".uploading"))
-            Dim dest As String = RemotePath.Combine(Me.destination, String.Concat(flNameWOext, extWithDot))
+            Dim tmpDest As String = RemotePath.Combine(Me.ftpDestinationFolder, String.Concat(flNameWOext, extWithDot, ".uploading"))
+            Dim dest As String = RemotePath.Combine(Me.ftpDestinationFolder, String.Concat(flNameWOext, extWithDot))
 
             'Possible error FileExists
             If ses.FileExists(dest) Then
@@ -55,7 +52,6 @@ Public Class UploadFile
                   .isUploaded = False,
                   .isDoneRunning = True
                }
-               dgvRow.Cells(3).Value = "File already uploaded."
             Else
                'Possible error FileExists
                If ses.FileExists(tmpDest) Then
@@ -77,10 +73,8 @@ Public Class UploadFile
                   .isUploaded = True,
                   .isDoneRunning = True
                }
-               dgvRow.Cells(3).Value = "Completed"
             End If
          Catch ex As Exception
-            dgvRow.Cells(3).Value = ex.Message
             status = New _STAT_INFO() With {
                .isErr = True,
                .errMsg = "Uploading error => " & ex.Message,
@@ -90,7 +84,6 @@ Public Class UploadFile
             }
          End Try
       Catch ex As Exception
-         dgvRow.Cells(3).Value = ex.Message
          status = New _STAT_INFO() With {
             .isErr = True,
             .errMsg = "Open session error => " & ex.Message,
@@ -107,6 +100,7 @@ Public Class UploadFile
       Public isRunning As Boolean = False
       Public isUploaded As Boolean = False
       Public isDoneRunning As Boolean = False
+      Public uploadPercentage As String = ""
    End Class
 #End Region
 End Class
