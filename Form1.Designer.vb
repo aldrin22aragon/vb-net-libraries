@@ -24,7 +24,7 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.ClockPanel1 = New vb_net_libraries.ClockPanel()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Timer1
@@ -32,24 +32,26 @@ Partial Class Form1
         Me.Timer1.Enabled = True
         Me.Timer1.Interval = 1000
         '
-        'ClockPanel1
+        'Button1
         '
-        Me.ClockPanel1.Location = New System.Drawing.Point(25, 28)
-        Me.ClockPanel1.Name = "ClockPanel1"
-        Me.ClockPanel1.Size = New System.Drawing.Size(262, 231)
-        Me.ClockPanel1.TabIndex = 0
+        Me.Button1.Location = New System.Drawing.Point(372, 81)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 0
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
-        Me.Controls.Add(Me.ClockPanel1)
+        Me.Controls.Add(Me.Button1)
         Me.Name = "Form1"
         Me.Text = "Form1"
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents Timer1 As Timer
-    Friend WithEvents ClockPanel1 As ClockPanel
+    Friend WithEvents Button1 As Button
 End Class
