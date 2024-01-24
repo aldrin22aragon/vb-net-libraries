@@ -164,6 +164,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="libraries\AlphanumComparator.vb" />
+    <Compile Include="libraries\AOADataTables.vb" />
     <Compile Include="libraries\AOATcpIP.vb" />
     <Compile Include="libraries\AOA_Timer.vb" />
     <Compile Include="libraries\ClockPanel.vb">
@@ -175,6 +176,12 @@
     <Compile Include="libraries\DbMysql v2.vb" />
     <Compile Include="libraries\DownloadFile.vb" />
     <Compile Include="libraries\FileSettingsCreator2.vb" />
+    <Compile Include="libraries\FtpBrowser.designer.vb">
+      <DependentUpon>FtpBrowser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="libraries\FtpBrowser.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="libraries\History.vb" />
     <Compile Include="libraries\MyDb.vb" />
     <Compile Include="libraries\MyExcel.vb" />
@@ -205,6 +212,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="libraries\FtpBrowser.resx">
+      <DependentUpon>FtpBrowser.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
