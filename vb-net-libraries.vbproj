@@ -264,5 +264,8 @@
     <Content Include="leaf_128_IxO_icon %281%29.ico" />
     <Content Include="libraries\MyFaceRec Notes.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Forms\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
