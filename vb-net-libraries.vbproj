@@ -182,6 +182,12 @@
     <Compile Include="libraries\FtpBrowser.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="libraries\FtpSettings.Designer.vb">
+      <DependentUpon>FtpSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="libraries\FtpSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="libraries\History.vb" />
     <Compile Include="libraries\MyDb.vb" />
     <Compile Include="libraries\MyExcel.vb" />
@@ -215,6 +221,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="libraries\FtpBrowser.resx">
       <DependentUpon>FtpBrowser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="libraries\FtpSettings.resx">
+      <DependentUpon>FtpSettings.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
