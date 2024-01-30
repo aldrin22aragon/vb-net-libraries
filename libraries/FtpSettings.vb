@@ -60,7 +60,7 @@ Public Class FtpSettings
 
    Private Sub BtnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSave.Click
       ReturnSessionOptions = FormValue
-      BtnCancel.PerformClick()
+      DialogResult = DialogResult.OK
    End Sub
 
    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnTestConnect.Click

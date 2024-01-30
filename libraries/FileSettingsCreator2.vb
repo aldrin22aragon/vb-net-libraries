@@ -60,6 +60,7 @@ Public Class FileSettingsCreator2(Of T)
          If Not IO.File.Exists(path) Then
             Using a As New IO.StreamWriter(path)
             End Using
+            Return Nothing
          End If
          Dim txtLines As String() = IO.File.ReadAllLines(path)
          Dim tx As String = ""
