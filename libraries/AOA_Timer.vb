@@ -1,4 +1,4 @@
-'aldrin 101
+'aldrin
 Public Class AOA_Timer
    Friend WithEvents Timer As New Timer
    Event Tick(e As TickEventInfo)
@@ -28,29 +28,36 @@ Public Class AOA_Timer
       If IsTimeReached() Then
          SW.Stop()
          Timer.Stop()
+         RaiseEvent Tick(New TickEventInfo() With {
+                    .IsTimeReached = True,
+                    .Span = RemainingTime(),
+                    .secondsRemaining = RemainingSeconds()
+         })
+      Else
+         RaiseEvent Tick(New TickEventInfo() With {
+                    .IsTimeReached = False,
+                    .Span = RemainingTime(),
+                    .secondsRemaining = RemainingSeconds()
+         })
       End If
-      RaiseEvent Tick(New TickEventInfo() With {
-                      .IsTimeReached = IsTimeReached(),
-                      .Span = RemainingTime(),
-                      .secondsRemaining = RemainingSeconds()
-      })
    End Sub
 
    Public Function IsTimeReached() As Boolean
-      Return SW.Elapsed.Seconds >= maximumSeconds
+      Return SW.Elapsed.TotalSeconds >= maximumSeconds
    End Function
    Function RemainingTime() As TimeSpan
-      Dim res As Integer = maximumSeconds - SW.Elapsed.Seconds
+      Dim res As Integer = maximumSeconds - SW.Elapsed.TotalSeconds
       Dim span As TimeSpan = TimeSpan.FromSeconds(res)
       Return span
    End Function
    Function RemainingSeconds() As Integer
-      Return maximumSeconds - SW.Elapsed.Seconds
+      Return maximumSeconds - SW.Elapsed.TotalSeconds
    End Function
 
    Class TickEventInfo
       Public IsTimeReached As Boolean
       Public secondsRemaining As Integer
       Public Span As TimeSpan
+      Public debug As String
    End Class
 End Class
