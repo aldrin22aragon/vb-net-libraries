@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports WinSCP
 Public Class FtpSettings
+   'new comment
    Public ReturnSessionOptions As SessionOptions = Nothing
 
    Private Sub BtnCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnCancel.Click
@@ -27,14 +28,17 @@ Public Class FtpSettings
 
    Property FormValue As SessionOptions
       Get
-         Return New SessionOptions With {
+         Dim res As New SessionOptions With {
             .HostName = TxtHost.Text,
             .PortNumber = TxtPort.Value,
             .UserName = TxtUsername.Text,
             .Password = TxtPassword.Text,
-            .Protocol = IIf(CmbConnectionType.SelectedItem = "FTP", Protocol.Ftp, Protocol.Sftp),
-            .SshHostKeyFingerprint = TxtHostkey.Text
+            .Protocol = IIf(CmbConnectionType.SelectedItem = "FTP", Protocol.Ftp, Protocol.Sftp)
          }
+         If res.Protocol = Protocol.Sftp Then
+            res.SshHostKeyFingerprint = TxtHostkey.Text
+         End If
+         Return res
       End Get
       Set(value As SessionOptions)
          TxtHost.Text = ""
