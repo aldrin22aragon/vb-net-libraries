@@ -70,6 +70,11 @@ Public Class DownloadFile
                .isDoneRunning = True
             }
          End Try
+         ses.Close()
+         ses.Dispose()
+         GC.Collect()
+         GC.WaitForPendingFinalizers()
+
       Catch ex As Exception
          status = New _STAT_INFO() With {
                .isErr = True,
