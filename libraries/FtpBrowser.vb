@@ -236,8 +236,11 @@ Public Class FtpBrowser
             Catch ex As Exception
                MsgBox(("Please try again.§§" & ex.Message).Replace("§", vbNewLine), MsgBoxStyle.Critical, "Error on listing directory.")
             End Try
+            ses.Close()
             ses.Dispose()
             ses = Nothing
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
          Catch ex As Exception
             MsgBox(("Please try again.§§" & ex.Message).Replace("§", vbNewLine), MsgBoxStyle.Critical, "Error on connecting to ftp")
          End Try

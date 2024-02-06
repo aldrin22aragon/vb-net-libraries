@@ -74,8 +74,11 @@ Public Class FtpSettings
          Dim session As Session = New Session
          session.Open(FormValue)
          MessageBox.Show("Successfully Connected", "FTP Test", MessageBoxButtons.OK, MessageBoxIcon.Information)
+         session.Close()
          session.Dispose()
          session = Nothing
+         GC.Collect()
+         GC.WaitForPendingFinalizers()
          BtnTestConnect.Text = "Test Connection"
          BtnTestConnect.Enabled = True
       Catch ex As Exception
