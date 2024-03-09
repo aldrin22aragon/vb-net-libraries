@@ -26,13 +26,43 @@ Public Class UploadFile
       th = New System.Threading.Thread(AddressOf RunThread)
       th.Start()
    End Sub
+
+   Public Shared Sub CreateFtpDirectoryRecursive(ses As Session, ftpDirectory As String)
+      If ses.Opened Then
+         If Not ses.FileExists(ftpDirectory) Then
+            Dim slice As String() = ftpDirectory.Split("/")
+            Dim p As String = ""
+            For Each i As String In slice
+               If i = "" Then
+                  p = ""
+               Else
+                  p = p & "/" & i
+                  If Not ses.FileExists(p) Then
+                     Try
+                        ses.CreateDirectory(p)
+                     Catch ex As Exception
+                        If ses.FileExists(p) Then
+                           Continue For
+                        Else
+                           Throw New Exception("Error on creating FTP directory :" & p)
+                        End If
+                     End Try
+                  End If
+               End If
+            Next
+         End If
+      Else
+         Throw New Exception("Session must be open  in Sub CreateDirectoryRecursive.")
+      End If
+   End Sub
+
    Private Sub RunThread()
       Try
          Dim ses As New Session
          AddHandler ses.FileTransferProgress, Sub(sender As Object, e As FileTransferProgressEventArgs)
                                                  status.uploadPercentage = String.Concat((e.FileProgress * 100).ToString, "%")
                                               End Sub
-         ses.Open(Me.sesOptions)
+         ses.Open(Me.sesOptions) ' possible error opening session
          Try
             Dim transferOpt As New WinSCP.TransferOptions With {
                .TransferMode = TransferMode.Binary
@@ -42,7 +72,7 @@ Public Class UploadFile
             Dim extWithDot As String = IO.Path.GetExtension(Me.flPath)
             Dim tmpDest As String = RemotePath.Combine(Me.ftpDestinationFolder, String.Concat(flNameWOext, extWithDot, ".uploading"))
             Dim dest As String = RemotePath.Combine(Me.ftpDestinationFolder, String.Concat(flNameWOext, extWithDot))
-
+            CreateFtpDirectoryRecursive(ses, Me.ftpDestinationFolder)
             'Possible error FileExists
             If ses.FileExists(dest) Then
                status = New _STAT_INFO() With {
