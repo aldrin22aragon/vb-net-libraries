@@ -205,6 +205,7 @@
     <Compile Include="libraries\MyFaceRec.vb" />
     <Compile Include="libraries\MyLabelfader.vb" />
     <Compile Include="libraries\PdfToTiffCOnverter.vb" />
+    <Compile Include="libraries\SendEmail.vb" />
     <Compile Include="libraries\Shortcut Creator.vb" />
     <Compile Include="libraries\SuccessReasonData.vb" />
     <Compile Include="libraries\TextboxPlaceholder.vb" />

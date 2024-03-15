@@ -7,6 +7,7 @@ Public Class FileSettingsCreator2(Of T)
    ReadOnly crpt As Crypt.String
    Dim instanceOfT As T
    Shared password As String = ""
+   Public Encryptedvalues As Boolean = True
 
    Public Overrides Function ToString() As String
       Return IO.Path.GetFileNameWithoutExtension(Me.path)
@@ -32,10 +33,14 @@ Public Class FileSettingsCreator2(Of T)
    Function SetSettings(classObj As T, Optional showError As Boolean = False) As Boolean
       Dim res As Boolean = False
       Dim tmpStr As String = JsonConvert.SerializeObject(classObj)
-      Dim spl As Object = SplitInParts(tmpStr, 100)
+      Dim spl As Object = SplitInParts(tmpStr, 5000)
       Dim newSplt As New List(Of String)
       For Each i As String In spl
-         newSplt.Add(crpt.Encrypt(i))
+         If Encryptedvalues Then
+            newSplt.Add(crpt.Encrypt(i))
+         Else
+            newSplt.Add(i)
+         End If
       Next
       Try
          Dim wr As New IO.StreamWriter(path, False)
@@ -58,14 +63,18 @@ Public Class FileSettingsCreator2(Of T)
    Function GetSettings(Optional showError As Boolean = False) As T
       Try
          If Not IO.File.Exists(path) Then
-            Using a As New IO.StreamWriter(path)
-            End Using
+            'Using a As New IO.StreamWriter(path)
+            'End Using
             Return Nothing
          End If
          Dim txtLines As String() = IO.File.ReadAllLines(path)
          Dim tx As String = ""
          For Each i As String In txtLines
-            tx = String.Concat(tx, crpt.Decrypt(i))
+            If Encryptedvalues Then
+               tx = String.Concat(tx, crpt.Decrypt(i))
+            Else
+               tx = String.Concat(tx, i)
+            End If
          Next
          instanceOfT = JsonConvert.DeserializeObject(tx, instanceOfT.GetType)
          'JsonConvert.PopulateObject(tx, instanceOfT)
