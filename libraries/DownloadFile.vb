@@ -2,12 +2,13 @@
 ' add reference WinSCPnet.dll 5.17.8.0
 
 Imports WinSCP
+Imports System.Windows.Forms
 Public Class DownloadFile
    ReadOnly sesOptions As SessionOptions
    ReadOnly ftpFilePath As String
    ReadOnly destination As String
    '
-   Public status As New _STAT_INFO()
+   Public DL_info As New DownloadInfo
    Public th As System.Threading.Thread
    Public removeAfterDowload As Boolean = False
    '
@@ -17,7 +18,7 @@ Public Class DownloadFile
       Me.destination = destFolder
    End Sub
    Sub StartDownload()
-      status = New _STAT_INFO() With {.isRunning = True}
+      DL_info.Status = DownloadInfo.E_Status.Started
       th = New System.Threading.Thread(AddressOf RunThread)
       th.Start()
    End Sub
@@ -25,8 +26,9 @@ Public Class DownloadFile
       Try
          Dim ses As New Session
          AddHandler ses.FileTransferProgress, Sub(sender As Object, e As FileTransferProgressEventArgs)
-                                                 status.DownloadPercentage = String.Concat((e.FileProgress * 100).ToString, "%")
+                                                 DL_info.DownloadPercentage = String.Concat((e.FileProgress * 100).ToString, "%")
                                               End Sub
+         DL_info.Status = DownloadInfo.E_Status.OPENING_SESSIONG
          ses.Open(Me.sesOptions)
          Try
             Dim transferOpt As New WinSCP.TransferOptions With {
@@ -39,6 +41,7 @@ Public Class DownloadFile
                tmpDownloadingPath = String.Concat(tmpDest, ".downloading", cnt)
                cnt += 1
             End While
+            DL_info.Status = DownloadInfo.E_Status.Downloading
             Dim transferResult As WinSCP.TransferOperationResult = ses.GetFiles(Me.ftpFilePath, tmpDownloadingPath, removeAfterDowload, transferOpt)
             transferResult.Check()
             Dim i As Integer = 0
@@ -53,47 +56,41 @@ Public Class DownloadFile
                Dim xt As String = IO.Path.GetExtension(Me.ftpFilePath)
                downloadedFile = IO.Path.Combine(Me.destination, String.Concat(tmpFlNm, cnt, xt))
             End While
+            DL_info.Status = DownloadInfo.E_Status.FINALIZING
             My.Computer.FileSystem.RenameFile(tmpDownloadingPath, IO.Path.GetFileName(downloadedFile))
-            status = New _STAT_INFO() With {
-               .isErr = False,
-               .errMsg = "Downloaded",
-               .isRunning = False,
-               .isDownloaded = True,
-               .isDoneRunning = True
-            }
+            DL_info.Status = DownloadInfo.E_Status.Downloaded
          Catch ex As Exception
-            status = New _STAT_INFO() With {
-               .isErr = True,
-               .errMsg = "Downloading error => " & ex.Message,
-               .isRunning = False,
-               .isDownloaded = False,
-               .isDoneRunning = True
-            }
+            DL_info.Status = DownloadInfo.E_Status.Error
+            DL_info.ErrorExeption = ex
+            DL_info.ErrorMessage = "Error from downloading file."
          End Try
-
          ses.Close()
          ses.Dispose()
          GC.Collect()
          GC.WaitForPendingFinalizers()
-
       Catch ex As Exception
-         status = New _STAT_INFO() With {
-               .isErr = True,
-               .errMsg = "Open session error => " & ex.Message,
-               .isRunning = False,
-               .isDownloaded = False,
-               .isDoneRunning = True
-            }
+         DL_info.Status = DownloadInfo.E_Status.Error
+         DL_info.ErrorExeption = ex
+         DL_info.ErrorMessage = "Error from opening session."
       End Try
    End Sub
+
 #Region "Utensils"
-   Class _STAT_INFO
-      Public isErr As Boolean = False
-      Public errMsg As String = ""
-      Public isRunning As Boolean = False
-      Public isDownloaded As Boolean = False
-      Public isDoneRunning As Boolean = False
+   Class DownloadInfo
+      Enum E_Status As Integer
+         NONE
+         Started
+         OPENING_SESSIONG
+         Downloading
+         FINALIZING
+         Downloaded
+         [Error]
+      End Enum
+      Public Status As E_Status = E_Status.NONE
+      Public ErrorExeption As Exception = Nothing
+      Public StatusMessage As String = ""
       Public DownloadPercentage As String = ""
+      Public ErrorMessage As String = ""
    End Class
 #End Region
 End Class

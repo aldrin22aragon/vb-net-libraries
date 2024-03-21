@@ -7,6 +7,7 @@ Public Class FileSettingsCreator2(Of T)
    ReadOnly crpt As Crypt.String
    Dim instanceOfT As T
    Shared password As String = ""
+   Public CharactersSplitLength As Integer = 5000
 
    Public Overrides Function ToString() As String
       Return IO.Path.GetFileNameWithoutExtension(Me.path)
@@ -23,7 +24,7 @@ Public Class FileSettingsCreator2(Of T)
       ' Pwede sa array pero hindi pwede sa List
       Public name As String = ""
    End Class
-   Sub example()
+   Sub Example()
       Dim a As New FileSettingsCreator2(Of SettingsInfo)("C:\Users\soft10\Documents\Face recognition\drihnz.txt", New SettingsInfo)
       Dim b = a.GetSettings() ' get the setting from file
       a.SetSettings(New SettingsInfo()) ' save the setings to file
@@ -32,7 +33,7 @@ Public Class FileSettingsCreator2(Of T)
    Function SetSettings(classObj As T, Optional showError As Boolean = False) As Boolean
       Dim res As Boolean = False
       Dim tmpStr As String = JsonConvert.SerializeObject(classObj)
-      Dim spl As Object = SplitInParts(tmpStr, 100)
+      Dim spl As Object = SplitInParts(tmpStr, CharactersSplitLength)
       Dim newSplt As New List(Of String)
       For Each i As String In spl
          newSplt.Add(crpt.Encrypt(i))

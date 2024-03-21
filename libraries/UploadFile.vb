@@ -2,13 +2,14 @@
 ' add reference WinSCPnet.dll 5.17.8.0
 
 Imports WinSCP
+Imports System.Windows.Forms
 Public Class UploadFile
    ReadOnly sesOptions As SessionOptions
    ReadOnly flPath As String
    ReadOnly ftpDestinationFolder As String
    '
-   Public status As New _STAT_INFO()
-   Public th As System.Threading.Thread
+   Public UP_Info As New UploadInfo
+   Private th As System.Threading.Thread
 
    Sub New(filePath As String, ftpDestinationFolder As String, sesOption As WinSCP.SessionOptions)
       Me.flPath = filePath
@@ -16,13 +17,7 @@ Public Class UploadFile
       Me.ftpDestinationFolder = ftpDestinationFolder
    End Sub
    Sub StartUpload()
-      status = New _STAT_INFO() With {
-         .isErr = False,
-         .errMsg = "",
-         .isRunning = True,
-         .isUploaded = False,
-         .isDoneRunning = False
-      }
+      UP_Info.Status = UploadInfo.E_Status.Started
       th = New System.Threading.Thread(AddressOf RunThread)
       th.Start()
    End Sub
@@ -60,8 +55,9 @@ Public Class UploadFile
       Try
          Dim ses As New Session
          AddHandler ses.FileTransferProgress, Sub(sender As Object, e As FileTransferProgressEventArgs)
-                                                 status.uploadPercentage = String.Concat((e.FileProgress * 100).ToString, "%")
+                                                 UP_Info.DownloadPercentage = String.Concat((e.FileProgress * 100).ToString, "%")
                                               End Sub
+         UP_Info.Status = UploadInfo.E_Status.OPENING_SESSION
          ses.Open(Me.sesOptions) ' possible error opening session
          Try
             Dim transferOpt As New WinSCP.TransferOptions With {
@@ -75,13 +71,7 @@ Public Class UploadFile
             CreateFtpDirectoryRecursive(ses, Me.ftpDestinationFolder)
             'Possible error FileExists
             If ses.FileExists(dest) Then
-               status = New _STAT_INFO() With {
-                  .isErr = False,
-                  .errMsg = "File already uploaded.",
-                  .isRunning = False,
-                  .isUploaded = False,
-                  .isDoneRunning = True
-               }
+               UP_Info.Status = UploadInfo.E_Status.File_Already_Exist
             Else
                'Possible error FileExists
                If ses.FileExists(tmpDest) Then
@@ -89,54 +79,49 @@ Public Class UploadFile
                   ses.RemoveFile(tmpDest)
                End If
                'Possible error PutFiles
+               UP_Info.Status = UploadInfo.E_Status.Uploading
                transferResult = ses.PutFiles(Me.flPath, tmpDest, False, transferOpt)
                transferResult.Check()
                While Not transferResult.IsSuccess
                   Application.DoEvents()
                End While
                'Possible error MoveFile
+               UP_Info.Status = UploadInfo.E_Status.FINALIZING
                ses.MoveFile(tmpDest, dest)
-               status = New _STAT_INFO() With {
-                  .isErr = False,
-                  .errMsg = "Uploaded",
-                  .isRunning = False,
-                  .isUploaded = True,
-                  .isDoneRunning = True
-               }
+               UP_Info.Status = UploadInfo.E_Status.Uploaded
             End If
          Catch ex As Exception
-            status = New _STAT_INFO() With {
-               .isErr = True,
-               .errMsg = "Uploading error => " & ex.Message,
-               .isRunning = False,
-               .isUploaded = False,
-               .isDoneRunning = True
-            }
+            UP_Info.Status = UploadInfo.E_Status.Error
+            UP_Info.ErrorExeption = ex
+            UP_Info.ErrorMessage = "Error from Uploading file."
          End Try
-
          ses.Close()
          ses.Dispose()
          GC.Collect()
          GC.WaitForPendingFinalizers()
-
       Catch ex As Exception
-         status = New _STAT_INFO() With {
-            .isErr = True,
-            .errMsg = "Open session error => " & ex.Message,
-            .isRunning = False,
-            .isUploaded = False,
-            .isDoneRunning = True
-         }
+         UP_Info.Status = UploadInfo.E_Status.Error
+         UP_Info.ErrorExeption = ex
+         UP_Info.ErrorMessage = "Error from Opening session."
       End Try
    End Sub
 #Region "Utensils"
-   Class _STAT_INFO
-      Public isErr As Boolean = False
-      Public errMsg As String = ""
-      Public isRunning As Boolean = False
-      Public isUploaded As Boolean = False
-      Public isDoneRunning As Boolean = False
-      Public uploadPercentage As String = ""
+   Class UploadInfo
+      Enum E_Status As Integer
+         NONE
+         Started
+         OPENING_SESSION
+         File_Already_Exist
+         Uploading
+         FINALIZING
+         Uploaded
+         [Error]
+      End Enum
+      Public Status As E_Status = E_Status.NONE
+      Public ErrorExeption As Exception = Nothing
+      Public StatusMessage As String = ""
+      Public DownloadPercentage As String = ""
+      Public ErrorMessage As String = ""
    End Class
 #End Region
 End Class
