@@ -75,11 +75,11 @@ Partial Class FtpBrowser
         Me.PictureBox1.TabIndex = 8
         Me.PictureBox1.TabStop = False
         '
-        'btnNext_
+        'BtnNext_
         '
         Me.BtnNext_.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BtnNext_.Location = New System.Drawing.Point(214, 198)
-        Me.BtnNext_.Name = "btnNext_"
+        Me.BtnNext_.Name = "BtnNext_"
         Me.BtnNext_.Size = New System.Drawing.Size(30, 25)
         Me.BtnNext_.TabIndex = 7
         Me.BtnNext_.Text = "→"
@@ -127,7 +127,7 @@ Partial Class FtpBrowser
         Me.btnOpen.Text = "Open"
         Me.btnOpen.UseVisualStyleBackColor = True
         '
-        'lv
+        'Lv
         '
         Me.Lv.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.Lv.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -135,7 +135,7 @@ Partial Class FtpBrowser
         Me.Lv.GridLines = True
         Me.Lv.HideSelection = False
         Me.Lv.Location = New System.Drawing.Point(3, 2)
-        Me.Lv.Name = "lv"
+        Me.Lv.Name = "Lv"
         Me.Lv.Size = New System.Drawing.Size(411, 192)
         Me.Lv.SmallImageList = Me.ImageList1
         Me.Lv.TabIndex = 0
@@ -168,6 +168,7 @@ Partial Class FtpBrowser
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
