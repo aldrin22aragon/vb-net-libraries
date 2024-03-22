@@ -3,11 +3,12 @@
 'in Manage NuGet Pacjages
 Imports Newtonsoft.Json
 Public Class FileSettingsCreator2(Of T)
-   ReadOnly path As String = ""
+   Public path As String = ""
    ReadOnly crpt As Crypt.String
    Dim instanceOfT As T
    Shared password As String = ""
-   Public CharactersSplitLength As Integer = 5000
+   Public SetEnCrypted As Boolean = True
+   Private Const EncryptedKey As String = "_DEJAVU_"
 
    Public Overrides Function ToString() As String
       Return IO.Path.GetFileNameWithoutExtension(Me.path)
@@ -24,7 +25,7 @@ Public Class FileSettingsCreator2(Of T)
       ' Pwede sa array pero hindi pwede sa List
       Public name As String = ""
    End Class
-   Sub Example()
+   Sub example()
       Dim a As New FileSettingsCreator2(Of SettingsInfo)("C:\Users\soft10\Documents\Face recognition\drihnz.txt", New SettingsInfo)
       Dim b = a.GetSettings() ' get the setting from file
       a.SetSettings(New SettingsInfo()) ' save the setings to file
@@ -33,13 +34,20 @@ Public Class FileSettingsCreator2(Of T)
    Function SetSettings(classObj As T, Optional showError As Boolean = False) As Boolean
       Dim res As Boolean = False
       Dim tmpStr As String = JsonConvert.SerializeObject(classObj)
-      Dim spl As Object = SplitInParts(tmpStr, CharactersSplitLength)
+      Dim spl As Object = SplitInParts(tmpStr, 5000)
       Dim newSplt As New List(Of String)
       For Each i As String In spl
-         newSplt.Add(crpt.Encrypt(i))
+         If SetEnCrypted Then
+            newSplt.Add(crpt.Encrypt(i))
+         Else
+            newSplt.Add(i)
+         End If
       Next
       Try
          Dim wr As New IO.StreamWriter(path, False)
+         If SetEnCrypted AndAlso newSplt.Count > 0 Then
+            newSplt(0) = EncryptedKey & newSplt(0)
+         End If
          For Each i As String In newSplt
             wr.WriteLine(i)
          Next
@@ -59,14 +67,25 @@ Public Class FileSettingsCreator2(Of T)
    Function GetSettings(Optional showError As Boolean = False) As T
       Try
          If Not IO.File.Exists(path) Then
-            Using a As New IO.StreamWriter(path)
-            End Using
+            'Using a As New IO.StreamWriter(path)
+            'End Using
             Return Nothing
          End If
          Dim txtLines As String() = IO.File.ReadAllLines(path)
          Dim tx As String = ""
+         Dim isEncrypted As Boolean = False
+         If txtLines.Length > 0 Then
+            If txtLines(0).StartsWith(EncryptedKey) Then
+               isEncrypted = True
+               txtLines(0) = txtLines(0).Replace(EncryptedKey, "")
+            End If
+         End If
          For Each i As String In txtLines
-            tx = String.Concat(tx, crpt.Decrypt(i))
+            If isEncrypted Then
+               tx = String.Concat(tx, crpt.Decrypt(i))
+            Else
+               tx = String.Concat(tx, i)
+            End If
          Next
          instanceOfT = JsonConvert.DeserializeObject(tx, instanceOfT.GetType)
          'JsonConvert.PopulateObject(tx, instanceOfT)
@@ -87,6 +106,11 @@ Public Class FileSettingsCreator2(Of T)
       End If
       Return Enumerable.Range(0, Math.Ceiling(s.Length / partLength)).Select(Function(i) s.Substring(i * partLength, If(s.Length - (i * partLength) >= partLength, partLength, Math.Abs(s.Length - (i * partLength)))))
    End Function
+
+   Enum EnryptType As Integer
+      ENCRYPTED
+      NOTSAFE
+   End Enum
 
 #Region "Encryptor and decryptor"
    Public Shared Function convertObject_To_StringEncrypted(classObj As Object) As String
