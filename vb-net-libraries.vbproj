@@ -185,6 +185,8 @@
     <Compile Include="libraries\csvWriter.vb" />
     <Compile Include="libraries\DbMysql v2.vb" />
     <Compile Include="libraries\DownloadFile.vb" />
+    <Compile Include="libraries\ErrorLogsCreator.vb" />
+    <Compile Include="libraries\FileManager.vb" />
     <Compile Include="libraries\FileSettingsCreator2.vb" />
     <Compile Include="libraries\FtpBrowser.designer.vb">
       <DependentUpon>FtpBrowser.vb</DependentUpon>
@@ -204,6 +206,7 @@
     <Compile Include="libraries\MyExcel.vb" />
     <Compile Include="libraries\MyFaceRec.vb" />
     <Compile Include="libraries\MyLabelfader.vb" />
+    <Compile Include="libraries\MyMessageBox.vb" />
     <Compile Include="libraries\PdfToTiffCOnverter.vb" />
     <Compile Include="libraries\SendEmail.vb" />
     <Compile Include="libraries\Shortcut Creator.vb" />
