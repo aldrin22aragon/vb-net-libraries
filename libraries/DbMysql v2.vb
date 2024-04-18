@@ -44,6 +44,7 @@ Public Class DbMysql
       Dim tbl_lastRow As DataRow
       Dim tbl_rowCount As Integer
       Dim lastInsertedData As DataTable
+      Dim Exception As Exception
       Sub New(message As String, Optional isSuccess As Boolean = False, Optional affectedCount As Integer = 0, Optional tbl As DataTable = Nothing, Optional insertedData As DataTable = Nothing)
          Me.message = message
          Me.isSucces = isSuccess
@@ -139,26 +140,6 @@ Public Class DbMysql
       Me.connection = New MySqlConnection(connectionProp.ConnectionString)
    End Sub
 
-   'Function SelectQuery(columns As String, tableName As String, Optional whereCondition As String = "1", Optional bindParams As Dictionary(Of String, Object) = Nothing) As ReturnStatement
-   '   Dim sql As String = String.Concat("SELECT ", columns, " FROM ", tableName, " WHERE ", whereCondition)
-   '   TryOpenConnection()
-   '   Dim cmd As New MySqlCommand(sql, Me.connection)
-   '   If bindParams IsNot Nothing Then
-   '      For Each dict As KeyValuePair(Of String, Object) In bindParams
-   '         cmd.Parameters.AddWithValue(dict.Key, dict.Value)
-   '      Next
-   '   End If
-   '   Try
-   '      Dim adapter As New MySqlDataAdapter(cmd)
-   '      Dim tbl As New DataTable
-   '      adapter.Fill(tbl)
-   '      TryCloseConncetion()
-   '      Return New ReturnStatement("okay", True, tbl.Rows.Count, tbl)
-   '   Catch ex As Exception
-   '      Return New ReturnStatement(ex.Message)
-   '   End Try
-   'End Function
-
    Iterator Function IterateSelectQuery(IterateCMD As MySqlCommand) As IEnumerable(Of MySqlDataReader)
       IterateCMD.Connection.Open()
       Dim rd = IterateCMD.ExecuteReader
@@ -208,7 +189,9 @@ Public Class DbMysql
          TryCloseConncetion()
          Return New ReturnStatement("okay", True, tbl.Rows.Count, tbl)
       Catch ex As Exception
-         Return New ReturnStatement(ex.Message)
+         Return New ReturnStatement() With {
+            .Exception = ex, .message = ex.Message
+         }
       End Try
    End Function
    'example
@@ -244,7 +227,9 @@ Public Class DbMysql
             Return New ReturnStatement(res.message)
          End If
       Catch ex As Exception
-         Return New ReturnStatement(ex.Message)
+         Return New ReturnStatement() With {
+            .Exception = ex, .message = ex.Message
+         }
       End Try
    End Function
    'res = .myDb.NonQuery(String.Concat("Update investigate_tbl set allocate_user_id=@allocate_user_id, upd_process_id=@upd_process_id, state=@state WHERE id=@id"),
@@ -266,7 +251,9 @@ Public Class DbMysql
          TryCloseConncetion()
          Return New ReturnStatement("okay", True, count)
       Catch ex As Exception
-         Return New ReturnStatement(ex.Message)
+         Return New ReturnStatement() With {
+            .Exception = ex, .message = ex.Message
+         }
       End Try
    End Function
 
@@ -284,7 +271,9 @@ Public Class DbMysql
          TryCloseConncetion()
          Return New ReturnStatement("okay", True, count)
       Catch ex As Exception
-         Return New ReturnStatement(ex.Message)
+         Return New ReturnStatement() With {
+            .Exception = ex, .message = ex.Message
+         }
       End Try
    End Function
 
@@ -295,7 +284,9 @@ Public Class DbMysql
          TryCloseConncetion()
          Return New ReturnStatement("okay", True, count)
       Catch ex As Exception
-         Return New ReturnStatement(ex.Message)
+         Return New ReturnStatement() With {
+            .Exception = ex, .message = ex.Message
+         }
       End Try
    End Function
 

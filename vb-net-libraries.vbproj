@@ -202,6 +202,7 @@
     </Compile>
     <Compile Include="libraries\History.vb" />
     <Compile Include="libraries\ICSharpCode_Zip.vb" />
+    <Compile Include="libraries\MyDataTables.vb" />
     <Compile Include="libraries\MyDb.vb" />
     <Compile Include="libraries\MyExcel.vb" />
     <Compile Include="libraries\MyFaceRec.vb" />
