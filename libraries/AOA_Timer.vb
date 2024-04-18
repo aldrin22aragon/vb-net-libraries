@@ -1,7 +1,7 @@
 'aldrin
 Public Class AOA_Timer
    Friend WithEvents Timer As New Timer
-   Event Tick(e As TickEventInfo)
+   Event Tick(sender As AOA_Timer, e As TickEventInfo)
    Public maximumSeconds As Integer
    Dim SW As Stopwatch = Nothing
    'ReadOnly mode As Mode_enum
@@ -41,13 +41,13 @@ Public Class AOA_Timer
       If IsTimeReached() Then
          SW.Stop()
          Timer.Stop()
-         RaiseEvent Tick(New TickEventInfo() With {
+         RaiseEvent Tick(Me, New TickEventInfo() With {
                     .IsTimeReached = True,
                     .Span = RemainingTime(),
                     .secondsRemaining = RemainingSeconds()
          })
       Else
-         RaiseEvent Tick(New TickEventInfo() With {
+         RaiseEvent Tick(Me, New TickEventInfo() With {
                     .IsTimeReached = False,
                     .Span = RemainingTime(),
                     .secondsRemaining = RemainingSeconds()
