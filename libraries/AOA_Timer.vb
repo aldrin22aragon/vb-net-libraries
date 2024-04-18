@@ -55,7 +55,11 @@ Public Class AOA_Timer
       End If
    End Sub
 
-   Public Function IsTimeReached() As Boolean
+   Public Function IsRunning() As Boolean
+      Return SW IsNot Nothing AndAlso SW.IsRunning
+   End Function
+
+   Private Function IsTimeReached() As Boolean
       Return SW.Elapsed.TotalSeconds >= maximumSeconds
    End Function
    Function RemainingTime() As TimeSpan
