@@ -13,6 +13,10 @@ Public Class AOA_Timer
       maximumSeconds = seconds
    End Sub
 
+   Public Function IsRunning() As Boolean
+      Return SW.IsRunning
+   End Function
+
    Sub StartRunning(Optional overWriteSeconds As Integer = 0)
       If SW Is Nothing Then
          If overWriteSeconds > 0 Then maximumSeconds = overWriteSeconds
