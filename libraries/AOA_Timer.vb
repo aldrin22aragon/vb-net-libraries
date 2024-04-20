@@ -4,6 +4,7 @@ Public Class AOA_Timer
    Event Tick(sender As AOA_Timer, e As TickEventInfo)
    Public maximumSeconds As Integer
    Dim SW As Stopwatch = Nothing
+   Dim backup As Integer = -1
    'ReadOnly mode As Mode_enum
    'Enum Mode_enum As Integer
    '   RunOnce = 1
@@ -13,9 +14,15 @@ Public Class AOA_Timer
       maximumSeconds = seconds
    End Sub
 
-   Public Function IsRunning() As Boolean
-      Return SW.IsRunning
-   End Function
+   Sub Stop_()
+      If SW IsNot Nothing AndAlso SW.IsRunning Then SW.Stop()
+      Timer.Stop()
+   End Sub
+
+   Sub ExtendMaximum(seconds As Integer)
+      backup = maximumSeconds
+      maximumSeconds += seconds
+   End Sub
 
    Sub StartRunning(Optional overWriteSeconds As Integer = 0)
       If SW Is Nothing Then
@@ -45,6 +52,10 @@ Public Class AOA_Timer
       If IsTimeReached() Then
          SW.Stop()
          Timer.Stop()
+         If backup <> -1 Then
+            maximumSeconds = backup
+            backup = -1
+         End If
          RaiseEvent Tick(Me, New TickEventInfo() With {
                     .IsTimeReached = True,
                     .Span = RemainingTime(),
