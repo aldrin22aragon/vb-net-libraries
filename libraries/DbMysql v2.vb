@@ -43,14 +43,14 @@ Public Class DbMysql
       Dim tbl_firstRow As DataRow
       Dim tbl_lastRow As DataRow
       Dim tbl_rowCount As Integer
-      Dim lastInsertedData As DataTable
+      Dim lastInsertedDataID As String
       Dim Exception As Exception
-      Sub New(message As String, Optional isSuccess As Boolean = False, Optional affectedCount As Integer = 0, Optional tbl As DataTable = Nothing, Optional insertedData As DataTable = Nothing)
+      Sub New(message As String, Optional isSuccess As Boolean = False, Optional affectedCount As Integer = 0, Optional tbl As DataTable = Nothing, Optional insertedData As String = "")
          Me.message = message
          Me.isSucces = isSuccess
          Me.affectedCount = affectedCount
          Me.tbl = tbl
-         Me.lastInsertedData = insertedData
+         Me.lastInsertedDataID = insertedData
          If tbl IsNot Nothing Then
             Me.tbl_rowCount = tbl.Rows.Count
             If tbl.Rows.Count > 0 Then
@@ -222,7 +222,12 @@ Public Class DbMysql
       Try
          Dim res = Me.SelectQuery(sql, bindParams)
          If res.isSucces And res.tbl_rowCount > 0 Then
-            Return New ReturnStatement("okay", True, 1, Nothing, res.tbl)
+            Dim insertedID As String = res.tbl_firstRow.Item("id")
+            If Val(insertedID) > 0 Then
+               Return New ReturnStatement("okay", True, 1, Nothing, insertedID)
+            Else
+               Throw New Exception("Failed to Insert data due to last_insert_id does not return a value.")
+            End If
          Else
             Return New ReturnStatement(res.message)
          End If
