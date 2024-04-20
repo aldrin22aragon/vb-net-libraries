@@ -230,6 +230,8 @@ Public Class DbMysql
          Return New ReturnStatement() With {
             .Exception = ex, .message = ex.Message
          }
+      Finally
+         TryCloseConncetion()
       End Try
    End Function
    'res = .myDb.NonQuery(String.Concat("Update investigate_tbl set allocate_user_id=@allocate_user_id, upd_process_id=@upd_process_id, state=@state WHERE id=@id"),
@@ -238,7 +240,6 @@ Public Class DbMysql
    'New String() {"state", 2},
    'New String() {"upd_process_id", process_tbl_inserted_id}})
    Function NonQuery(sql As String, ParamArray bindParams() As Array) As ReturnStatement
-      Dim extColumns As String = ""
       TryOpenConnection()
       Dim cmd As New MySqlCommand(sql, Me.connection)
       If bindParams.Length > 0 Then
@@ -258,7 +259,6 @@ Public Class DbMysql
    End Function
 
    Function NonQuery2(sql As String, ParamArray bindParams() As Array) As ReturnStatement
-      Dim extColumns As String = ""
       TryOpenConnection()
       Dim cmd As New MySqlCommand(sql, Me.connection)
       If bindParams.Length > 0 Then
