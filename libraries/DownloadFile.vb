@@ -12,12 +12,15 @@ Public Class DownloadFile
    Public th As System.Threading.Thread
    Public removeAfterDowload As Boolean = False
    '
+   Property IsProcessDone As Boolean = False
+   '
    Sub New(ftpFilePath As String, destFolder As String, sesOption As WinSCP.SessionOptions)
       Me.ftpFilePath = ftpFilePath
       Me.sesOptions = sesOption
       Me.destination = destFolder
    End Sub
    Sub StartDownload()
+      IsProcessDone = False
       DL_info.Status = DownloadInfo.E_Status.Started
       th = New System.Threading.Thread(AddressOf RunThread)
       th.Start()
@@ -41,7 +44,9 @@ Public Class DownloadFile
                tmpDownloadingPath = String.Concat(tmpDest, ".downloading", cnt)
                cnt += 1
             End While
+            '            '
             DL_info.Status = DownloadInfo.E_Status.Downloading
+
             Dim transferResult As WinSCP.TransferOperationResult = ses.GetFiles(Me.ftpFilePath, tmpDownloadingPath, removeAfterDowload, transferOpt)
             transferResult.Check()
             Dim i As Integer = 0
@@ -49,6 +54,9 @@ Public Class DownloadFile
                Application.DoEvents()
             End While
             Dim downloadedFile As String = IO.Path.Combine(Me.destination, IO.Path.GetFileName(Me.ftpFilePath))
+            If IO.File.Exists(downloadedFile) Then
+               IO.File.Delete(downloadedFile)
+            End If
             cnt = 0
             While IO.File.Exists(downloadedFile)
                cnt += 1
@@ -73,6 +81,7 @@ Public Class DownloadFile
          DL_info.ErrorExeption = ex
          DL_info.ErrorMessage = "Error from opening session."
       End Try
+      IsProcessDone = True
    End Sub
 
 #Region "Utensils"

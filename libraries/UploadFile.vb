@@ -2,21 +2,22 @@
 ' add reference WinSCPnet.dll 5.17.8.0
 
 Imports WinSCP
-Imports System.Windows.Forms
 Public Class UploadFile
    ReadOnly sesOptions As SessionOptions
    ReadOnly flPath As String
    ReadOnly ftpDestinationFolder As String
+   Property IsProcessDone As Boolean = False
    '
    Public UP_Info As New UploadInfo
    Private th As System.Threading.Thread
-
+   Public Overwrite As Boolean = False
    Sub New(filePath As String, ftpDestinationFolder As String, sesOption As WinSCP.SessionOptions)
       Me.flPath = filePath
       Me.sesOptions = sesOption
       Me.ftpDestinationFolder = ftpDestinationFolder
    End Sub
    Sub StartUpload()
+      IsProcessDone = False
       UP_Info.Status = UploadInfo.E_Status.Started
       th = New System.Threading.Thread(AddressOf RunThread)
       th.Start()
@@ -69,8 +70,8 @@ Public Class UploadFile
             Dim tmpDest As String = RemotePath.Combine(Me.ftpDestinationFolder, String.Concat(flNameWOext, extWithDot, ".uploading"))
             Dim dest As String = RemotePath.Combine(Me.ftpDestinationFolder, String.Concat(flNameWOext, extWithDot))
             CreateFtpDirectoryRecursive(ses, Me.ftpDestinationFolder)
-            'Possible error FileExists
-            If ses.FileExists(dest) Then
+            'Possible error FileExists 
+            If ses.FileExists(dest) And Not Overwrite Then
                UP_Info.Status = UploadInfo.E_Status.File_Already_Exist
             Else
                'Possible error FileExists
@@ -87,6 +88,9 @@ Public Class UploadFile
                End While
                'Possible error MoveFile
                UP_Info.Status = UploadInfo.E_Status.FINALIZING
+               If ses.FileExists(dest) Then
+                  ses.RemoveFile(dest)
+               End If
                ses.MoveFile(tmpDest, dest)
                UP_Info.Status = UploadInfo.E_Status.Uploaded
             End If
@@ -104,6 +108,7 @@ Public Class UploadFile
          UP_Info.ErrorExeption = ex
          UP_Info.ErrorMessage = "Error from Opening session."
       End Try
+      IsProcessDone = True
    End Sub
 #Region "Utensils"
    Class UploadInfo
