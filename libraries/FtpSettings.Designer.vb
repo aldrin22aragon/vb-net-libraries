@@ -130,7 +130,6 @@ Partial Class FtpSettings
         Me.TxtPort.Font = New System.Drawing.Font("Segoe UI Semibold", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TxtPort.Location = New System.Drawing.Point(86, 102)
         Me.TxtPort.Maximum = New Decimal(New Integer() {32500, 0, 0, 0})
-        Me.TxtPort.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.TxtPort.Name = "TxtPort"
         Me.TxtPort.Size = New System.Drawing.Size(304, 22)
         Me.TxtPort.TabIndex = 96
