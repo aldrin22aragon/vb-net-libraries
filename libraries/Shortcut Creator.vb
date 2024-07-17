@@ -28,9 +28,11 @@ Public Class Shortcut_Creator
       Public MESSAGE As String = ""
    End Class
    Public Shared Function GetStartupFolder() As String
-      Return Environment.GetFolderPath(Environment.SpecialFolder.Startup)
+      Dim res = Environment.GetFolderPath(Environment.SpecialFolder.Startup)
+      Return res
    End Function
-   Public Shared Function IsShortcutExists(nameWOext As String, directory As String) As Boolean
-      Return IO.File.Exists(IO.Path.Combine(directory, nameWOext & ".lnk"))
+   Public Shared Function IsShortcutExists(Dir As String, fileNameWOExt As String) As Boolean
+      Dim fl As String = IO.Path.Combine(Dir, fileNameWOExt & ".lnk")
+      Return IO.File.Exists(fl)
    End Function
 End Class

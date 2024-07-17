@@ -1,10 +1,11 @@
 'aldrin
 Public Class AOA_Timer
-   Friend WithEvents Timer As New Timer
-   Event Tick(sender As AOA_Timer, e As TickEventInfo)
+   Friend WithEvents Timer As New Timer()
+   Event Tick(sender As AOA_Timer3, e As TickEventInfo)
    Public maximumSeconds As Integer
    Dim SW As Stopwatch = Nothing
    Dim backup As Integer = -1
+   Public firstRunStartsAt_seconds As Integer = 0
    'ReadOnly mode As Mode_enum
    'Enum Mode_enum As Integer
    '   RunOnce = 1
@@ -71,10 +72,20 @@ Public Class AOA_Timer
    End Sub
 
    Public Function IsRunning() As Boolean
-      Return SW IsNot Nothing AndAlso SW.IsRunning
+      If SW IsNot Nothing Then
+         Return SW.IsRunning
+      Else
+         Return False
+      End If
    End Function
 
    Private Function IsTimeReached() As Boolean
+      If firstRunStartsAt_seconds > 0 Then
+         If SW.Elapsed.TotalSeconds >= firstRunStartsAt_seconds Then
+            firstRunStartsAt_seconds = 0
+            Return True
+         End If
+      End If
       Return SW.Elapsed.TotalSeconds >= maximumSeconds
    End Function
    Function RemainingTime() As TimeSpan
