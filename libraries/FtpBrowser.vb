@@ -30,6 +30,9 @@ Public Class FtpBrowser
       ' This call is required by the designer.
       InitializeComponent()
       ' Add any initialization after the InitializeComponent() call.
+      If defPath = "" Then
+         defPath = "/"
+      End If
       Me.DefPath = defPath
       Me.sessionOptions = sessionOptions_
       mode = md

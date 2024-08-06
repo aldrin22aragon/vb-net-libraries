@@ -1,8 +1,8 @@
 'aldrin
 Public Class AOA_Timer
    Friend WithEvents Timer As New Timer()
-   Event Tick(sender As AOA_Timer3, e As TickEventInfo)
-   Public maximumSeconds As Integer
+    Event Tick(sender As AOA_Timer, e As TickEventInfo)
+    Public maximumSeconds As Integer
    Dim SW As Stopwatch = Nothing
    Dim backup As Integer = -1
    Public firstRunStartsAt_seconds As Integer = 0

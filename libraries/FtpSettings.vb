@@ -16,7 +16,6 @@ Public Class FtpSettings
       ' Add any initialization after the InitializeComponent() call.
 
    End Sub
-
    Private Sub CmbConnectionType_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CmbConnectionType.SelectedIndexChanged
       Dim type = CmbConnectionType.SelectedItem.ToString
       If LCase(type) = "sftp" Then
@@ -36,7 +35,11 @@ Public Class FtpSettings
             .Protocol = IIf(CmbConnectionType.SelectedItem = "FTP", Protocol.Ftp, Protocol.Sftp)
          }
          If res.Protocol = Protocol.Sftp Then
-            res.SshHostKeyFingerprint = TxtHostkey.Text
+            Try
+               res.SshHostKeyFingerprint = TxtHostkey.Text
+            Catch ex As Exception
+               MsgBox(ex.Message)
+            End Try
          End If
          Return res
       End Get
